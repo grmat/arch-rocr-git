@@ -1,0 +1,12 @@
+pkgbase = roc-rocr-git
+	pkgdesc = ROCm Platform Runtime: ROCr a HPC market enhanced HSA based runtime
+	pkgver = 1.1.0.r13.g8dc021c
+	pkgrel = 1
+	arch = x86_64
+	license = MIT
+	makedepends = git libelf
+	source = git+https://github.com/RadeonOpenCompute/ROCR-Runtime.git
+	sha256sums = SKIP
+
+pkgname = roc-rocr-git
+
