@@ -8,7 +8,7 @@ pkgrel=1
 arch=('x86_64')
 license=('MIT')
 makedepends=('git libelf')
-depends=('')
+depends=('roc-roct-git')
 
 source=("git+https://github.com/RadeonOpenCompute/${_pkgname}.git")
 sha256sums=('SKIP')
@@ -22,26 +22,20 @@ build() {
   cd "${srcdir}/${_pkgname}/src"
   mkdir build
   cd build
-  cmake -D CMAKE_PREFIX_PATH=/usr \
+  cmake -D CMAKE_PREFIX_PATH=/opt/rocm/libhsakmt \
+        -D CMAKE_INSTALL_PREFIX="${pkgdir}/opt/rocm" \
         ..
   make ${MAKEFLAGS}
 }
 
 package() {
-  mkdir -p "${pkgdir}/usr/include"
-  cp -r "${srcdir}/${_pkgname}/src/inc" "${pkgdir}/usr/include/hsa"
-
-#? amd_hsa_tools_interfaces.h
-#? hsa_ext_debugger.h
-#? hsa_ext_profiler.h
-
-  cd ${srcdir}/${_pkgname}/src/build
-  mkdir -p "${pkgdir}/usr/lib"
-  mv "libhsa-runtime64.so.1.0.0" "${pkgdir}/usr/lib/"
-  mv "libhsa-runtime64.so.1" "${pkgdir}/usr/lib/"
+  mkdir -p ${pkgdir}/opt/rocm
+  cd "${srcdir}/${_pkgname}/src/build"
+  make install
 
   mkdir -p "${pkgdir}/usr/share/licenses/${pkgname}"
   install -D -m644 "${srcdir}/${_pkgname}/LICENSE.txt" "${pkgdir}/usr/share/licenses/${pkgname}/"
 
+  make clean
   rm -rf "${srcdir}/${_pkgname}/src/build"
 }
